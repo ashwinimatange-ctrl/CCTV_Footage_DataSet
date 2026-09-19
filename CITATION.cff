@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use this software or the associated count dataset, please cite the Mendeley deposit and this repository."
+title: "Pune CCTV Traffic Detect–Track–Count Pipeline"
+type: software
+authors:
+  - family-names: Matange
+    given-names: Ashwini
+  - family-names: Abraham
+    given-names: Jibi
+identifiers:
+  - type: doi
+    value: 10.17632/xnf2k6n288.1
+    description: Heterogeneous Traffic Count Dataset, Pune (public CSV subset)
+repository-code: https://github.com/YOUR_ORG/YOUR_REPO
+abstract: >
+  YOLOv8n + ByteTrack detect–track–count pipeline for direction-resolved
+  heterogeneous traffic counts from Pune Traffic Police CCTV. The published
+  dataset (2023) is the Mendeley count release (DOI 10.17632/xnf2k6n288.1;
+  counts only). The train dataset (2022 raw CCTV video) is not published
+  online due to privacy limitations. This repository ships code and docs only.
+keywords:
+  - traffic counts
+  - CCTV
+  - YOLOv8
+  - ByteTrack
+  - Pune
+  - heterogeneous traffic
+license: MIT

@@ -1,0 +1,62 @@
+# Large media and model weights (download separately)
+**/*.avi
+**/*.mp4
+**/*.mkv
+**/*.pt
+**/*.onnx
+**/*.engine
+weights/*
+!weights/README.md
+
+# Local datasets (links only in repo)
+data/*
+!data/README.md
+!data/event_spotcheck_23_18_9.csv
+
+# Example small CSVs (coverage / completeness)
+!examples/
+!examples/**
+
+# Prediction input (user-supplied)
+prediction/input/*
+!prediction/input/README.md
+
+# Pipeline outputs
+artifacts/*
+!artifacts/.gitkeep
+logs/
+**/__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Generated figure rasters
+figures/*.png
+figures/*.pdf
+
+# Env and secrets
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*~
+
+# Verint Review client binaries (if footage tree is nearby)
+**/Review/**
+**/ReviewLauncher.exe
+**/*.dll
+**/*.exe
+
+# Large CSV dumps (use Mendeley DOI instead)
+**/*_one.csv
+**/traffic.zip
