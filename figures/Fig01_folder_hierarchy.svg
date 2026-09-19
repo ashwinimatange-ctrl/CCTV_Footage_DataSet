@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="520" viewBox="0 0 1120 520" role="img" aria-label="Dataset folder hierarchy">
+  <defs>
+    <style type="text/css"><![CDATA[
+      .title { font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: 700; fill: #1a2332; }
+      .label { font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: 600; fill: #1a2332; }
+      .sub { font-family: Consolas, 'Courier New', monospace; font-size: 12px; fill: #334155; }
+      .hint { font-family: Arial, Helvetica, sans-serif; font-size: 11px; fill: #64748b; }
+      .box { fill: #f4f7fb; stroke: #1a2332; stroke-width: 1.5; }
+      .box-root { fill: #1a2332; }
+      .box-root-t { fill: #f8fafc; font-family: Arial, Helvetica, sans-serif; font-size: 15px; font-weight: 700; }
+      .box-j { fill: #e8f0e9; stroke: #2f5d3a; stroke-width: 1.5; }
+      .box-cam { fill: #fff8ef; stroke: #8a5a1a; stroke-width: 1.5; }
+      .line { stroke: #475569; stroke-width: 1.5; fill: none; }
+    ]]></style>
+  </defs>
+  <rect width="1120" height="520" fill="#ffffff"/>
+  <text x="40" y="32" class="title">Dataset folder hierarchy</text>
+  <text x="40" y="52" class="hint">traffic/ -&gt; junction folders -&gt; camera folders -&gt; day CSVs (example expansion of camera a2)</text>
+
+  <rect x="460" y="76" width="200" height="44" rx="6" class="box-root"/>
+  <text x="560" y="104" text-anchor="middle" class="box-root-t">traffic/</text>
+
+  <path class="line" d="M560 120 V146"/>
+  <path class="line" d="M200 146 H920"/>
+  <path class="line" d="M200 146 V166"/>
+  <path class="line" d="M560 146 V166"/>
+  <path class="line" d="M920 146 V166"/>
+
+  <rect x="120" y="166" width="160" height="40" rx="5" class="box-j"/>
+  <text x="200" y="192" text-anchor="middle" class="label">A/ (Alankar)</text>
+  <rect x="480" y="166" width="160" height="40" rx="5" class="box-j"/>
+  <text x="560" y="192" text-anchor="middle" class="label">J/ (Jehangir)</text>
+  <rect x="840" y="166" width="160" height="40" rx="5" class="box-j"/>
+  <text x="920" y="192" text-anchor="middle" class="label">R/ (RTO)</text>
+
+  <path class="line" d="M200 206 V226"/>
+  <path class="line" d="M140 226 H260"/>
+  <path class="line" d="M140 226 V246"/>
+  <path class="line" d="M260 226 V246"/>
+  <rect x="80" y="246" width="120" height="36" rx="4" class="box-cam"/>
+  <text x="140" y="269" text-anchor="middle" class="sub">a2/</text>
+  <rect x="220" y="246" width="120" height="36" rx="4" class="box-cam"/>
+  <text x="280" y="269" text-anchor="middle" class="sub">a3/</text>
+
+  <path class="line" d="M560 206 V226"/>
+  <path class="line" d="M480 226 H640"/>
+  <path class="line" d="M480 226 V246"/>
+  <path class="line" d="M560 226 V246"/>
+  <path class="line" d="M640 226 V246"/>
+  <rect x="420" y="246" width="100" height="36" rx="4" class="box-cam"/>
+  <text x="470" y="269" text-anchor="middle" class="sub">j1/</text>
+  <rect x="530" y="246" width="100" height="36" rx="4" class="box-cam"/>
+  <text x="580" y="269" text-anchor="middle" class="sub">j2/</text>
+  <rect x="640" y="246" width="100" height="36" rx="4" class="box-cam"/>
+  <text x="690" y="269" text-anchor="middle" class="sub">j3/</text>
+
+  <path class="line" d="M920 206 V226"/>
+  <path class="line" d="M840 226 H1000"/>
+  <path class="line" d="M840 226 V246"/>
+  <path class="line" d="M920 226 V246"/>
+  <path class="line" d="M1000 226 V246"/>
+  <rect x="780" y="246" width="100" height="36" rx="4" class="box-cam"/>
+  <text x="830" y="269" text-anchor="middle" class="sub">r1/</text>
+  <rect x="890" y="246" width="100" height="36" rx="4" class="box-cam"/>
+  <text x="940" y="269" text-anchor="middle" class="sub">r2/</text>
+  <rect x="1000" y="246" width="100" height="36" rx="4" class="box-cam"/>
+  <text x="1050" y="269" text-anchor="middle" class="sub">r3/</text>
+
+  <path class="line" d="M140 282 V306"/>
+  <rect x="40" y="306" width="520" height="180" rx="8" class="box"/>
+  <text x="56" y="334" class="label">Expansion of camera folder a2/</text>
+  <text x="56" y="364" class="sub">a2_11.csv   a2_12.csv   a2_13.csv   a2_14.csv</text>
+  <text x="56" y="388" class="sub">a2_15.csv   a2_16.csv   a2_17.csv   a2_18.csv</text>
+  <text x="56" y="420" class="hint">Naming: {camera}_{day}.csv  |  day = 11-18 January calendar span</text>
+  <text x="56" y="444" class="hint">Columns: Time, Direction, car, motorbike, bus, truck</text>
+  <text x="56" y="468" class="hint">Same pattern under a3/, j1-j3/, r1-r3/ (coverage varies by camera-day)</text>
+</svg>

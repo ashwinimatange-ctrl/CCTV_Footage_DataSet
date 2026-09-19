@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="400" viewBox="0 0 1200 400" role="img" aria-label="Video to CSV pipeline">
+  <defs>
+    <style type="text/css"><![CDATA[
+      .title { font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: 700; fill: #1a2332; }
+      .hint { font-family: Arial, Helvetica, sans-serif; font-size: 11px; fill: #64748b; }
+      .box-t { font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-weight: 700; fill: #1a2332; }
+      .box-s { font-family: Arial, Helvetica, sans-serif; font-size: 11px; fill: #475569; }
+      .step { fill: #f4f7fb; stroke: #1a2332; stroke-width: 1.5; }
+      .step-out { fill: #1a2332; }
+      .step-out-t { font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-weight: 700; fill: #f8fafc; }
+      .step-out-s { font-family: Arial, Helvetica, sans-serif; font-size: 11px; fill: #cbd5e1; }
+      .arrow { stroke: #2f5d3a; stroke-width: 2; fill: none; marker-end: url(#mArrow); }
+    ]]></style>
+    <marker id="mArrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#2f5d3a"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="400" fill="#ffffff"/>
+  <text x="40" y="32" class="title">Video-to-CSV data-generation pipeline</text>
+  <text x="40" y="52" class="hint">Frozen YOLOv8n (COCO) -&gt; ByteTrack -&gt; direction assignment -&gt; four-class count CSV</text>
+
+  <rect x="40" y="100" width="150" height="90" rx="8" class="step"/>
+  <text x="115" y="138" text-anchor="middle" class="box-t">1. CCTV</text>
+  <text x="115" y="158" text-anchor="middle" class="box-t">acquisition</text>
+  <text x="115" y="178" text-anchor="middle" class="box-s">Verint archive</text>
+
+  <path class="arrow" d="M195 145 H220"/>
+
+  <rect x="220" y="100" width="150" height="90" rx="8" class="step"/>
+  <text x="295" y="138" text-anchor="middle" class="box-t">2. Frame</text>
+  <text x="295" y="158" text-anchor="middle" class="box-t">extraction</text>
+  <text x="295" y="178" text-anchor="middle" class="box-s">stride = 5</text>
+
+  <path class="arrow" d="M375 145 H400"/>
+
+  <rect x="400" y="100" width="150" height="90" rx="8" class="step"/>
+  <text x="475" y="138" text-anchor="middle" class="box-t">3. Detection</text>
+  <text x="475" y="158" text-anchor="middle" class="box-t">YOLOv8n</text>
+  <text x="475" y="178" text-anchor="middle" class="box-s">conf 0.25 | NMS 0.45</text>
+
+  <path class="arrow" d="M555 145 H580"/>
+
+  <rect x="580" y="100" width="150" height="90" rx="8" class="step"/>
+  <text x="655" y="138" text-anchor="middle" class="box-t">4. Tracking</text>
+  <text x="655" y="158" text-anchor="middle" class="box-t">ByteTrack</text>
+  <text x="655" y="178" text-anchor="middle" class="box-s">persist IDs</text>
+
+  <path class="arrow" d="M735 145 H760"/>
+
+  <rect x="760" y="100" width="150" height="90" rx="8" class="step"/>
+  <text x="835" y="138" text-anchor="middle" class="box-t">5. Direction</text>
+  <text x="835" y="158" text-anchor="middle" class="box-t">assignment</text>
+  <text x="835" y="178" text-anchor="middle" class="box-s">UP/DOWN/LEFT/RIGHT</text>
+
+  <path class="arrow" d="M915 145 H940"/>
+
+  <rect x="940" y="100" width="150" height="90" rx="8" class="step"/>
+  <text x="1015" y="138" text-anchor="middle" class="box-t">6. Class</text>
+  <text x="1015" y="158" text-anchor="middle" class="box-t">aggregation</text>
+  <text x="1015" y="178" text-anchor="middle" class="box-s">car | motorbike | bus | truck</text>
+
+  <path class="arrow" d="M1015 190 V230"/>
+
+  <rect x="880" y="235" width="270" height="70" rx="8" class="step-out"/>
+  <text x="1015" y="265" text-anchor="middle" class="step-out-t">7. Count CSV output</text>
+  <text x="1015" y="288" text-anchor="middle" class="step-out-s">Time | Direction | class columns</text>
+
+  <text x="40" y="340" class="hint">Taxonomy: auto-rickshaw / e-rickshaw -&gt; car (four-class objective). Displacement &lt; ~20 px dropped.</text>
+  <text x="40" y="362" class="hint">Config: imgsz=640 | frozen yolov8n.pt | COCO 2/3/5/7 -&gt; car/motorbike/bus/truck</text>
+</svg>
