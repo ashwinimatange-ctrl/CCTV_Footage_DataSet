@@ -1,0 +1,55 @@
+# Frozen pipeline configuration (save before inference)
+
+version: "2026-09-16-v1"
+description: >
+  CPU detect-track-count trained/calibrated on local CCTV Verint archive (train dataset year 2022).
+  Train video is not published online due to privacy (faces/plates).
+  Published dataset is the 2023 Mendeley count release (DOI; counts only, no video).
+  Paths: set FOOTAGE_ROOT and MENDELEY_CSV env vars (see README and docker-compose).
+
+resources:
+  docker_cpus: 6.0
+  docker_mem_limit: "40g"
+  soft_throttle_pct: 85
+  hard_stop_pct: 90
+  concurrency_avis: 1
+
+detector:
+  family: YOLO
+  variant: YOLOv8n
+  package: ultralytics
+  weights: weights/yolov8n.pt  # COCO-pretrained; download separately (see weights/README.md)
+  imgsz: 640
+  conf: 0.25
+  iou: 0.45
+  device: cpu
+  batch: 1
+
+tracker:
+  name: ByteTrack
+  implementation: ultralytics.track
+  params: default_ultralytics_bytetrack
+
+class_map:
+  # COCO id -> output class
+  2: car          # car
+  3: motorbike    # motorcycle
+  5: bus
+  7: truck
+  # all other COCO classes ignored (including potential autos misclassified)
+
+direction:
+  method: dominant_displacement
+  axes: image
+  labels: [UP, DOWN, LEFT, RIGHT]
+  # UP: dy < 0 dominant; DOWN: dy > 0; LEFT: dx < 0; RIGHT: dx > 0
+  min_track_displacement_px: 20
+
+temporal:
+  frame_stride: 5
+  emit_schema: [Time, Direction, car, motorbike, bus, truck]
+
+data:
+  # Resolved at runtime from env FOOTAGE_ROOT / MENDELEY_CSV (Docker defaults below)
+  train_video_glob: "{FOOTAGE_ROOT}/{bucket}/ExportedMedia/*.avi"
+  mendeley_csv_dir: "{MENDELEY_CSV}"

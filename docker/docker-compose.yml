@@ -1,0 +1,27 @@
+services:
+  pipe:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: cctv-archive-pipe:2026-09-16
+    working_dir: /work
+    volumes:
+      - ..:/work
+      - ../artifacts:/work/artifacts
+      - ../weights:/work/weights:ro
+      # Host paths: set FOOTAGE_ROOT and MENDELEY_CSV before compose up
+      - ${FOOTAGE_ROOT:?Set FOOTAGE_ROOT to your local Verint footage root}:/footage:ro
+      - ${MENDELEY_CSV:?Set MENDELEY_CSV to extracted Mendeley CSV root}:/mendeley_csv:ro
+    environment:
+      WORK_ROOT: /work
+      FOOTAGE_ROOT: /footage
+      MENDELEY_CSV: /mendeley_csv
+      OMP_NUM_THREADS: "6"
+      MKL_NUM_THREADS: "6"
+      MEM_BUDGET_GB: "40"
+    cpus: 6.0
+    mem_limit: 40g
+    pids_limit: 256
+    security_opt:
+      - no-new-privileges:true
+    command: ["python", "-c", "print('pipeline ok')"]
