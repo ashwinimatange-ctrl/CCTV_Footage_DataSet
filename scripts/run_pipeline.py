@@ -102,6 +102,7 @@ def process_avi(path: Path, cfg: dict, model, out_dir: Path, overlay_dir: Path, 
     conf = float(cfg["detector"]["conf"])
     iou = float(cfg["detector"]["iou"])
     min_disp = float(cfg["direction"]["min_track_displacement_px"])
+    tracker_yaml = str(ROOT / cfg["tracker"]["config_file"])
 
     name = path.stem
     cam = name
@@ -135,6 +136,7 @@ def process_avi(path: Path, cfg: dict, model, out_dir: Path, overlay_dir: Path, 
             results = model.track(
                 frame,
                 persist=True,
+                tracker=tracker_yaml,
                 conf=conf,
                 iou=iou,
                 imgsz=imgsz,

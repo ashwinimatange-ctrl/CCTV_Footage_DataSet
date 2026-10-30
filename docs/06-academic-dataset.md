@@ -7,7 +7,6 @@ This page summarizes the scientific materials stored beside the footage and the 
 | File | Role |
 |------|------|
 | [`Data_Traffic_Dataset_Pune.docx`](../Data_Traffic_Dataset_Pune.docx) | Data Descriptor draft: *Direction-Resolved Heterogeneous Traffic Count Dataset for Pune Traffic Junctions* |
-| [`Scientific Data Journal -Response Document Major Revisions.docx`](../Scientific%20Data%20Journal%20-Response%20Document%20Major%20Revisions.docx) | Incomplete revision-response letter (14 Aug 2026); partly references FAAR / ambulance routing — **not** authoritative for the footage archive |
 
 ## Data Descriptor — summary
 
@@ -15,7 +14,7 @@ This page summarizes the scientific materials stored beside the footage and the 
 
 **Problem:** Public traffic datasets often assume homogeneous, lane-disciplined traffic. Indian urban junctions are heterogeneous and weakly lane-disciplined; models trained elsewhere generalize poorly.
 
-**Contribution:** Direction-resolved, vehicle-class traffic **counts** derived from Pune Traffic Police CCTV at three signalized junctions over seven days, released as CSV (no raw video in the public deposit).
+**Contribution:** Direction-resolved, vehicle-class traffic **counts** derived from Pune Traffic Police CCTV at three signalized junctions, 11–18 January 2023 (eight days, eight cameras), released as 115 CSV files (no raw video in the public deposit).
 
 ### Study junctions (paper codes — map to local Verint names)
 
@@ -27,7 +26,7 @@ This page summarizes the scientific materials stored beside the footage and the 
 
 **Author clarification:** The **train dataset is from 2022** (local Verint video) and is **not published online** due to privacy. The **published dataset is from 2023** (Mendeley counts). Local training video uses Verint camera names (509 Chowk, Axis Bank, etc.); map codes ↔ Verint labels.
 
-**Source note in paper:** Raw footage used nine duration classes — **5, 10, 15, 20, 25, 30, 45, 60 minutes, and 24 hours** — later harmonised into per-day CSV outputs. That duration taxonomy matches the local 2022 train archive. **Train/calibrate on 2022 CCTV** (offline); the online release is the **2023** privacy-safe count dataset only.
+**Source note in paper:** Camera buffers were 5, 10, 15, 20, 25, 30, 45, 60 minutes, and 24 hours. Those are buffer settings, not the length of the deposited count files. Deposited timestamps run about 09:00–12:00 local time (span about 3.00 h). A printed 0 is an observed zero. A clock second with no row is a gap and must not be filled with zero. **Train/calibrate on 2022 CCTV** (offline); the online release is the **2023** privacy-safe count dataset only.
 
 
 ### Published CSV organization
@@ -39,7 +38,7 @@ Hierarchy: **junction → camera → daily file**.
 | `<cameraID>_<day>.csv` | Primary day file, e.g. `a2_11.csv` = camera a2, day code 11 (**published dataset year 2023**) |
 | `<cameraID>_<day>_one.csv` | Continuation of the same session; concatenate in order |
 
-**Coverage (paper Table 3, summary):** Alankar 16+16 files; Jehangir 26+20; RTO 24+16 (primary + `_one`). Some camera-days incomplete (notably j3, r3).
+**Coverage:** 64 primary + 51 continuation = 115 CSV files. Alankar 16+16, Jehangir 24+19, RTO 24+16. Every camera has a primary file on each date from 11 to 18 January 2023. Thirteen camera-days have no continuation file: j3 on 11, 12, 13, 17 and 18 January, and r3 on all eight dates.
 
 ### CSV schema (Table 4)
 
@@ -58,13 +57,15 @@ One time interval yields up to **four rows** (one per direction).
 
 Five stages:
 
-1. **Frame extraction** — fixed sampling rate  
-2. **Vehicle detection** — YOLO-family detector  
-3. **Classification** — car / motorbike / bus / truck  
-4. **Multi-object tracking** — SORT / DeepSORT / ByteTrack-style identity across frames  
-5. **NMS + directional aggregation** — count by direction into time bins → CSV  
+1. **Frame extraction** — every 5th frame  
+2. **Vehicle detection** — YOLOv8n, Ultralytics 8.3.57, COCO weights frozen, `imgsz` 640, `conf` 0.25, `iou` 0.45  
+3. **Classification** — COCO 2/3/5/7 mapped to car / motorbike / bus / truck  
+4. **Tracking** — ByteTrack through `config/bytetrack.yaml` (`track_high_thresh` 0.25, `track_low_thresh` 0.1, `new_track_thresh` 0.25, `track_buffer` 30, `match_thresh` 0.8, `fuse_score` True), dependency `lap` 0.5.12. SORT and DeepSORT are cited for comparison only.  
+5. **Directional aggregation** — image-plane displacement into UP, DOWN, LEFT, RIGHT  
 
-**Compute (paper):** COEP cluster — 4× NVIDIA Tesla V100, Xeon E5-2698 v4, 256 GB RAM, Ubuntu + Python DL stack (TEQIP-III).
+**Compute (paper):** COEP cluster — 4× NVIDIA Tesla V100, Xeon E5-2698 v4, 256 GB RAM, Ubuntu, Python 3.11, Ultralytics 8.3.57, CUDA 12 (TEQIP-III). The Docker image in this repository is a CPU archive of the method and did not produce the Mendeley counts.
+
+**Config checksum:** SHA-256 of `config/config.yaml` as stored in git (LF): `2bbe990d6df5724b95e9d1703d3326266bfd67a2edc83ac85349ba78cf4db66e`.
 
 ### Known limitations (paper)
 
@@ -76,7 +77,8 @@ Five stages:
 
 - Public release: **counts only** (no frames, faces, plates)  
 - License: **CC BY 4.0**  
-- Footage obtained with institutional permission from Traffic Police Commissioner, Pune  
+- COEP Technological University sent an official request to the Police Commissioner, routed through the university administrative office, under a signed non-disclosure agreement. The agreement bars release of the raw video.
+- Others obtain the counts by downloading Mendeley Data Version 1 (CC BY 4.0). No application is required for those CSVs. The same video cannot be downloaded from Mendeley or GitHub.  
 
 ### External links
 
@@ -107,4 +109,4 @@ Manuscript should state **train dataset 2022 (unpublished online) / published da
 
 ## Revision-response document
 
-The response letter is a **template draft**: blank submission ID/title, truncated reviewer replies, and at least one response discussing **FAAR (Fog-Assisted Ambulance Routing)**. Use it only as evidence that a Scientific Data–style submission was in progress — **not** as a description of the Verint exports on this disk.
+The current point-by-point response is kept with the manuscript, not in this code repository. Do not use the older response draft that mentions FAAR (Fog-Assisted Ambulance Routing) as a description of this dataset.

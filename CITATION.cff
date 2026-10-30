@@ -11,7 +11,7 @@ identifiers:
   - type: doi
     value: 10.17632/xnf2k6n288.1
     description: Heterogeneous Traffic Count Dataset, Pune (public CSV subset)
-repository-code: https://github.com/YOUR_ORG/YOUR_REPO
+repository-code: https://github.com/ashwinimatange-ctrl/CCTV_Footage_DataSet
 abstract: >
   YOLOv8n + ByteTrack detect–track–count pipeline for direction-resolved
   heterogeneous traffic counts from Pune Traffic Police CCTV. The published

@@ -13,7 +13,7 @@ This folder is a **placeholder**. Large datasets are **not** committed to GitHub
 | License | CC BY 4.0 |
 | Contents | CSV vehicle counts by junction / camera / day (**no video**) |
 
-This is the only traffic dataset published online for this project.
+This is the only traffic dataset published online for this project. No application is required. The raw video is not in the deposit.
 
 ### Download steps
 

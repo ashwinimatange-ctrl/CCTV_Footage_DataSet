@@ -18,7 +18,7 @@ Copying or backing up this archive is I/O-bound; prefer resume-capable tools (`r
 
 | Present | Missing / external |
 |---------|-------------------|
-| Raw Verint AVI exports (**train/calibrate here**) | Original unpublished author YOLO configs (if different from demo) |
+| Raw Verint AVI exports (**train/calibrate here**) | The Mendeley counts were not produced by the CPU Docker image |
 | MediaExport XML (most packs) | Frame-level gold labels / bounding boxes |
 | Verint Review 7.6 offline players | Live NVR / RTSP connectivity |
 | Data Descriptor + draft response `.docx` | — |

@@ -20,7 +20,8 @@ Details: [`data/README.md`](data/README.md) · [`docs/06-academic-dataset.md`](d
 
 ```
 .
-├── config/config.yaml      # Frozen Methods config
+├── config/config.yaml      # Detector, tracker path, direction rules
+├── config/bytetrack.yaml   # Ultralytics 8.3.57 ByteTrack settings
 ├── scripts/                # Detect–track–count pipeline
 ├── analysis/               # Completeness, Table 4 coverage, comparison
 ├── eval/                   # Rickshaw audit + human GT metrics
@@ -124,7 +125,7 @@ python analysis\build_table4_coverage.py
 python eval\audit_rickshaw_confusion.py
 ```
 
-Frozen stack: **YOLOv8n (COCO)** + **ByteTrack**, CPU, `imgsz` 640, frame stride 5 — see [`config/config.yaml`](config/config.yaml).
+Frozen stack: **YOLOv8n (COCO)** in **Ultralytics 8.3.57**, **ByteTrack** via [`config/bytetrack.yaml`](config/bytetrack.yaml), `lap` 0.5.12, `imgsz` 640, `conf` 0.25, `iou` 0.45, frame stride 5. The public Docker image is a CPU archive of the method. It did not produce the Mendeley counts. GPU inference in the manuscript used CUDA 12. SHA-256 of [`config/config.yaml`](config/config.yaml) (git LF bytes): `2bbe990d6df5724b95e9d1703d3326266bfd67a2edc83ac85349ba78cf4db66e`.
 
 ## Documentation
 
