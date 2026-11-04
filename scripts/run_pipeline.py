@@ -96,12 +96,28 @@ def direction_from_delta(dx: float, dy: float, min_disp: float) -> str | None:
     return "DOWN" if dy > 0 else "UP"
 
 
+def resolve_device(cfg: dict) -> str:
+    """DEVICE=cpu or DEVICE=cuda wins. Otherwise CUDA when PyTorch can see a GPU."""
+    override = os.environ.get("DEVICE", "").strip().lower()
+    if override in ("cpu", "cuda"):
+        return override
+    try:
+        import torch
+        if torch.cuda.is_available():
+            return "cuda"
+    except Exception:
+        pass
+    return str(cfg.get("detector", {}).get("device", "cpu"))
+
+
 def process_avi(path: Path, cfg: dict, model, out_dir: Path, overlay_dir: Path, bucket: str) -> dict:
     stride = int(cfg["temporal"]["frame_stride"])
+    device = resolve_device(cfg)
     imgsz = int(cfg["detector"]["imgsz"])
     conf = float(cfg["detector"]["conf"])
     iou = float(cfg["detector"]["iou"])
     min_disp = float(cfg["direction"]["min_track_displacement_px"])
+    tracker_yaml = str(ROOT / cfg["tracker"]["config_file"])
 
     name = path.stem
     cam = name
@@ -135,10 +151,11 @@ def process_avi(path: Path, cfg: dict, model, out_dir: Path, overlay_dir: Path, 
             results = model.track(
                 frame,
                 persist=True,
+                tracker=tracker_yaml,
                 conf=conf,
                 iou=iou,
                 imgsz=imgsz,
-                device="cpu",
+                device=device,
                 verbose=False,
                 classes=list(CLASS_MAP.keys()),
             )
@@ -245,6 +262,7 @@ def run_bucket(bucket: str, cfg: dict, digest: str) -> dict:
         "generated": datetime.now(timezone.utc).isoformat(),
         "bucket": bucket,
         "config_sha256": digest,
+        "device": resolve_device(cfg),
         "n_avis": len(avis),
         "files": [],
     }
@@ -255,6 +273,7 @@ def run_bucket(bucket: str, cfg: dict, digest: str) -> dict:
         return summary
 
     weights = resolve_weights(cfg)
+    print(f"[{bucket}] device={summary['device']}", flush=True)
     model = YOLO(weights)
     for i, avi in enumerate(avis):
         # Skip if CSV already written for this camera in this bucket

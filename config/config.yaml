@@ -28,7 +28,19 @@ detector:
 tracker:
   name: ByteTrack
   implementation: ultralytics.track
-  params: default_ultralytics_bytetrack
+  ultralytics_version: "8.3.57"
+  # Ultralytics 8.3.57 cfg/default.yaml names botsort.yaml. This pipeline
+  # passes config/bytetrack.yaml, the Ultralytics 8.3.57 ByteTrack settings.
+  config_file: config/bytetrack.yaml
+  package_file: ultralytics/cfg/trackers/bytetrack.yaml
+  params:
+    tracker_type: bytetrack
+    track_high_thresh: 0.25
+    track_low_thresh: 0.1
+    new_track_thresh: 0.25
+    track_buffer: 30
+    match_thresh: 0.8
+    fuse_score: true
 
 class_map:
   # COCO id -> output class

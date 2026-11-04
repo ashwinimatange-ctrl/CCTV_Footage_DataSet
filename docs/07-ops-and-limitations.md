@@ -18,14 +18,14 @@ Copying or backing up this archive is I/O-bound; prefer resume-capable tools (`r
 
 | Present | Missing / external |
 |---------|-------------------|
-| Raw Verint AVI exports (**train/calibrate here**) | Original unpublished author YOLO configs (if different from demo) |
+| Raw Verint AVI exports (**train/calibrate here**) | The Mendeley counts were not produced by the CPU Docker image |
 | MediaExport XML (most packs) | Frame-level gold labels / bounding boxes |
 | Verint Review 7.6 offline players | Live NVR / RTSP connectivity |
 | Data Descriptor + draft response `.docx` | — |
 | Mendeley **2023 published** count dataset (download separately) | **2022 train** video cannot be published online (privacy) |
 | Detect–track–count pipeline (`scripts/`) | — |
 
-**Pipeline policy:** Train on the **2022** local CCTV database when available (not online). Use the **2023** Mendeley deposit as the published count dataset.
+**Pipeline policy:** When footage is available, use the XML dates (short clips are 20 April 2022). Read Mendeley as running totals. Do not treat the camera lists as one mapped corpus. `config/bytetrack.yaml` is in this tree. LF SHA-256 of `config/config.yaml` is `2bbe990d6df5724b95e9d1703d3326266bfd67a2edc83ac85349ba78cf4db66e`. The PDF prints a different hash.
 
 ## Tooling caveats
 
@@ -39,12 +39,13 @@ Copying or backing up this archive is I/O-bound; prefer resume-capable tools (`r
 
 ## Packaging / data-quality issues on disk
 
-1. **509 Chowk 1 (24 Hours):** 10 AVIs, **0** MediaExport XML — time bounds unknown without player UI or binary probing.  
-2. **Mahavir Chowk:** Export folders appear both under `24 Hours\ExportedMedia\` and as siblings under `24 Hours\` — possible duplicates.  
-3. **Folder typo:** `Axix Bank 3` (Axis).  
-4. **XML inventory noise:** ~438 `*.xml` files recursively vs ~53 true `Export__` manifests.  
-5. **Filename dates ≠ recording dates:** Export job stamps in names vs `StartTime`/`EndTime` in XML.  
-6. **Review duplication:** Eleven near-identical player trees waste space but keep each pack self-contained.
+1. **509 Chowk 1 (24 Hours):** 10 AVIs, **0** MediaExport XML. Recording window is not in the archive.  
+2. **Mahavir Chowk:** The same 8 AVIs are stored twice (same name, same size, 12.7 GB). Parts 4 and 5 of the morning half are missing in both copies.  
+3. **Axis Bank 3:** IST 16 April, gap 06:00–12:00. Folder typo `Axix Bank 3`.  
+4. **XML inventory noise:** ~438 `*.xml` files recursively vs 53 true `Export__` manifests.  
+5. **Filename dates are export stamps.** Short clips say 25 April 2022 in the name and 20 April 2022 in `StartTime`.  
+6. **Review duplication:** Eleven player trees. Unique AVI bytes are 86.67 GB.  
+7. **Mendeley values are running totals.** Do not sum rows. Last timestamp is 12:02:48. End-of-file total is 470,654 vehicles.
 
 ## Security / compliance
 
@@ -58,10 +59,10 @@ Copying or backing up this archive is I/O-bound; prefer resume-capable tools (`r
 2. Play a **5 min** export with Review to verify the workstation (if you have institutional 2022 footage).  
 3. Use [03-media-inventory.md](03-media-inventory.md) to pick camera/duration.  
 4. **Train/calibrate** detect–track–count on local 2022 AVIs; document cameras/`resourceId`s and UTC windows from XML.  
-5. Download **2023** Mendeley CSVs (see `data/README.md`) for published-dataset schema/share checks after site-label mapping.
+5. Download the Mendeley CSVs (see `data/README.md`). Take the last value in each file. Do not sum rows.
 
 ## Non-goals of this documentation
 
-- No redistribution of the 2022 train video (privacy)  
-- No reverse-engineering of Verint Review internals  
-- No claim that every Mendeley row is regenerated bit-exactly without site mapping + frozen Methods
+- No claim that the April 2022 video and the Mendeley CSVs are the same recordings
+- No reverse-engineering of Verint Review internals
+- No claim that summing Mendeley rows is a vehicle total

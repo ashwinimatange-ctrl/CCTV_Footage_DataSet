@@ -43,6 +43,9 @@ figures/*.pdf
 .env.*
 !.env.example
 
+# Local tool downloads
+.tools/
+
 # OS / editor
 .DS_Store
 Thumbs.db

@@ -8,25 +8,27 @@ This repository ships **code and documentation only**. Raw video and large CSV d
 
 | Resource | Year | What it is | Online? |
 |----------|------|------------|---------|
-| **Published dataset** | **2023** | Privacy-safe CSV counts (no video), CC BY 4.0 — [doi:10.17632/xnf2k6n288.1](https://doi.org/10.17632/xnf2k6n288.1) | **Yes** (Mendeley) |
-| **Train dataset** | **2022** | Local Verint AVI + MediaExport XML for detect–track–count | **No** — not published online (privacy: faces/plates) |
+| **Published counts** | Deposit title says Jan 2023; CSV has no year | Privacy-safe CSV running totals (no video), CC BY 4.0 — [doi:10.17632/xnf2k6n288.1](https://doi.org/10.17632/xnf2k6n288.1) | **Yes** (Mendeley) |
+| **Local video** | **April 2022** (XML). Names say 25 April | Verint AVI + MediaExport XML | **No** — not published online (privacy: faces/plates) |
 | **Model weights** | — | COCO-pretrained `yolov8n.pt` | Download separately — see [`weights/README.md`](weights/README.md) |
 
 Details: [`data/README.md`](data/README.md) · [`docs/06-academic-dataset.md`](docs/06-academic-dataset.md)
 
-**Framing:** The **published dataset is from 2023** (online Mendeley counts). The **train dataset is from 2022** and is **not published online** due to privacy limitations; mount local footage via `FOOTAGE_ROOT` only if you have institutional access.
+**Framing:** Local video on disk is April 2022 and is not published (privacy). The Mendeley deposit is counts only. Its title says January 2023; the CSV files have no year and the values are running totals. The two are not shown to be the same recordings. Mount footage with `FOOTAGE_ROOT` only if you have institutional access.
 
 ## Repository layout
 
 ```
 .
-├── config/config.yaml      # Frozen Methods config
+├── config/config.yaml      # Detector, tracker path, direction rules
+├── config/bytetrack.yaml   # Ultralytics 8.3.57 ByteTrack settings
 ├── scripts/                # Detect–track–count pipeline
 ├── analysis/               # Completeness, Table 4 coverage, comparison
 ├── eval/                   # Rickshaw audit + human GT metrics
 ├── prediction/             # Stratified KNN forecast helpers
 ├── figures/                # Fig01/Fig03 SVG + Fig02 builder
 ├── examples/               # Small coverage/completeness CSVs
+├── supplement/             # Camera-day inventory and 560 validation bins
 ├── docker/                 # Dockerfile + compose
 ├── docs/                   # Archive and dataset documentation
 ├── data/                   # DOI links + optional spotcheck CSV
@@ -81,13 +83,36 @@ On Linux/macOS, export `FOOTAGE_ROOT` and `MENDELEY_CSV` the same way before `do
 | `MEM_BUDGET_GB` | Soft/hard RAM throttle budget | `40` |
 | `BUCKET` | Duration folder name | `5 min` |
 | `RUN_REMAINING` | Resume incomplete short buckets | unset |
+| `DEVICE` | `cpu` or `cuda`. Unset: CUDA when PyTorch can see a GPU, otherwise CPU | unset |
 
 ## Quick start (local Python)
+
+The archived [`config/config.yaml`](config/config.yaml) still records `device: cpu`, so its LF SHA-256 stays `2bbe990d6df5724b95e9d1703d3326266bfd67a2edc83ac85349ba78cf4db66e`. The runner uses CUDA when PyTorch can see a GPU, and CPU otherwise. Set `DEVICE=cpu` or `DEVICE=cuda` to override that choice.
+
+The Docker image installs the CPU PyTorch wheel and is the image used by:
+
+```bat
+docker compose run --rm -e MEM_BUDGET_GB=40 -e BUCKET="5 min" pipe python scripts/run_pipeline.py
+```
+
+When `nvidia-smi` succeeds, install the CUDA wheel locally instead of the CPU wheel:
+
+```bat
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
+pip install -r requirements.txt
+set WORK_ROOT=%CD%
+set FOOTAGE_ROOT=D:\path\to\CCTV FOOTAGE DATA
+set MENDELEY_CSV=D:\path\to\extracted\traffic
+python scripts/run_pipeline.py
+```
+
+On a machine without a GPU:
 
 ```bat
 pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
 pip install -r requirements.txt
 set WORK_ROOT=%CD%
+set DEVICE=cpu
 set FOOTAGE_ROOT=D:\path\to\CCTV FOOTAGE DATA
 set MENDELEY_CSV=D:\path\to\extracted\traffic
 python scripts/run_pipeline.py
@@ -124,7 +149,7 @@ python analysis\build_table4_coverage.py
 python eval\audit_rickshaw_confusion.py
 ```
 
-Frozen stack: **YOLOv8n (COCO)** + **ByteTrack**, CPU, `imgsz` 640, frame stride 5 — see [`config/config.yaml`](config/config.yaml).
+Frozen stack: **YOLOv8n (COCO)** in **Ultralytics 8.3.57**, **ByteTrack** via [`config/bytetrack.yaml`](config/bytetrack.yaml), `lap` 0.5.12, `imgsz` 640, `conf` 0.25, `iou` 0.45, frame stride 5. The manuscript ran GPU inference with CUDA 12. This repository's config file still records `device: cpu` so the checksum below does not change. The runner uses CUDA when PyTorch can see a GPU, and CPU otherwise. Class columns in the deposit are running totals. Across 115 files the end-of-file total is 470,654 vehicles, and the last clock time is 12:02:48. A timestamp with no CSV row is an unobserved second. SHA-256 of [`config/config.yaml`](config/config.yaml) (git LF bytes): `2bbe990d6df5724b95e9d1703d3326266bfd67a2edc83ac85349ba78cf4db66e`. Camera-day coverage and the 560 validation bins are in [`supplement/`](supplement/).
 
 ## Documentation
 

@@ -10,9 +10,9 @@ Neutral production assets. Shared palette: ink `#1a2332`, green `#2f5d3a`, warm 
 
 Coordinates (published deposit):
 
-- Alankar Chowk: 18.52804 N, 73.87624 E
-- Jehangir Chowk: 18.5304 N, 73.8767 E
-- RTO Chowk: 18.5305 N, 73.8636 E
+- Alankar Chowk: 18.52804° N, 73.87624° E
+- Jehangir Chowk: 18.53040° N, 73.87670° E
+- RTO Chowk: 18.53050° N, 73.86360° E
 
 ```bat
 cd figures
